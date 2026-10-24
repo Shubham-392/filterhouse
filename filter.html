@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>FilterHouse</title>
+        <link rel="stylesheet" href="filter.css" />
+        <script src="filters.js" defer></script>
+    </head>
+    <body>
+        <ul id="filter">
+            <li>
+                <div id="filterhouse-default-filter-header">
+                    <h2>/bloom-filter</h2>
+                </div>
+                <!--<div id="filterhouse-filter-header">
+                    <h2>/cuckoo-filter</h2>
+                </div>
+                <div id="filterhouse-filter-header">
+                    <h2>/XOR-filter</h2>
+                </div>
+                <div id="filterhouse-filter-header">
+                    <h2>/binaryfuse-filter</h2>
+                </div>-->
+            </li>
+        </ul>
+        <div id="filterhouse-section-div">
+            <section id="filterhouse-filter-section">
+                <!--js operations will insert the code here for each filter except bloomfilter as it will be by default 
+                here for the webpage index-->
+                <h3 id="filtersection-header">BloomFilter</h3>
+                <p>
+                    <span>Bloom filters</span> are space-efficient probablistic data structures used to test whether an element is a member of a set.
+                    Discovered by Burton Howard Bloom in 1970
+                    <br><br>
+                    The explanation of bloomfilter is pretty standard and the parameters which it depends upon
+                    will be explained here. 
+                    <br>
+                    If you want to read more about bloomfilters i have listed some good resources later in the section
+                    <br><br>
+                    Bloomfilter depends on following factors:
+                    <ul id="factor-list">
+                    	<li><p>an array of m bits</p></li>
+                         <li><p>k: different hash functions count</p></li>
+                         <li><p>p: false positive probablity exclusively (0, 1)</p></li>
+                         <li> <p>n: expected number of elements in bloomfilter</p></li>
+                    </ul>
+                </p>
+
+                <h4>Calculator:</h4>
+                <form id="filter-calc">
+                    <div class="filter-input">
+                        <label for="number of bits">n :</label>
+                        <input type="text" name="n" value="8000">
+                    </div>
+                    <div class="filter-input">
+                        <label for="number of bits">p :</label>
+                        <input type="text" name="p" title="'0.001', '1000', '1k', '1e-3', '1e3' (all 1-in-1000)" value="1.0E-7">
+                    </div>
+                    <div class="filter-input">
+                        <label for="number of bits">k :</label>
+                        <input type="text" name="k" value="">
+                    </div>
+                    <div class="filter-input">
+                        <label for="number of bits">m :</label>
+                        <input type="text" step="any" name="m" value="">
+                    </div>
+
+                    <button type="submit" id="filter-input-submit-btn">Submit</button>
+                </form>
+
+                <div id="filter-result">
+                </div>
+            </section>
+        </div>
+
+        <footer id="filter-footer">
+            <strong>NOTE </strong>
+            <p>Cuckoo Filter, XOR Filter will be uploaded soon.</p>
+        </footer>
+    </body>
+</html>

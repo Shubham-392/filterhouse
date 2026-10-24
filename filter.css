@@ -1,0 +1,138 @@
+@font-face {
+  font-family: 'basier';
+  src: url('https://clickhouse.com/_next/static/immutable/media/basiersquare_medium_webfont-s.p.26xz92gu9g5hg.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'fontSohne';
+  src: url('https://clickhouse.com/_next/static/immutable/media/soehne_buch-s.p.0ywwmkbterhyn.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #141414;
+    font-family: 'basier', -apple-system;
+    height: 100%;
+}
+
+#filter{
+    list-style: none;
+    margin-top: 4rem;
+}
+#filter li{
+    display: flex;
+    justify-content: space-evenly;
+    /*border: solid 2px #faff69;*/
+    /*border-radius: 8px;*/
+    padding: 0;
+}
+#filterhouse-default-filter-header{
+    background-color: #3A3A3A;
+    border-radius: 6px;
+    color: #faff69;
+    h2{
+        margin: 5px;
+    } 
+}
+#filterhouse-filter-header{
+    color: #f9f9f9;
+    /*border: solid 1px #faff69;*/
+    h2{
+        margin: 5px;
+    }
+}
+
+#filterhouse-filter-header:hover{
+    background-color: #3A3A3A;
+    border-radius: 6px;
+    color: #faff69;
+    cursor: pointer;
+}
+#filterhouse-section-div{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    /*border: solid 2px #faff69;*/
+}
+
+section{
+    width: 55%;
+    font-family: 'fontSohne';
+    color: #f9f9f9;
+    font-size: 1.2rem;
+    /*border: solid 2px #faff69;*/
+    h3{
+        font-size: 1.8rem;
+        color: #faff69;
+    }
+
+
+}
+span{
+    text-decoration: underline;
+}
+
+#factor-list {
+    list-style-type: disc;
+}
+
+h4{
+    color: #faff69;
+}
+
+#filter-calc {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1rem;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    
+}
+.filter-input input{
+    width: 5rem;
+}
+
+#filter-input-submit-btn{
+    
+    width: 8rem;
+    background-color: #3A3A3A;
+    color: #faff69;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+#filter-result{
+    padding-left: 5px;
+    margin-top: 2rem;
+    margin-left:2rem;
+    margin-right: 2rem;
+    border: solid 2px #faff69;
+    border-radius: 5px;
+    p{
+        margin-left: 3rem;
+    }
+}
+
+#filter-footer{
+    text-align: center;
+    border: solid 2px #faff69;
+    border-radius: 11px;
+    margin:  4rem 16rem;
+    padding: 1rem;
+    color: #faff69;
+    font-size: 1.5rem;
+    strong{
+        text-decoration: underline;
+    }
+    p{
+        color: palevioletred;
+    }
+}
