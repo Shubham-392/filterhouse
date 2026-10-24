@@ -13,10 +13,10 @@
                 <div id="filterhouse-default-filter-header">
                     <h2>/bloom-filter</h2>
                 </div>
-                <!--<div id="filterhouse-filter-header">
+                <div id="filterhouse-filter-header">
                     <h2>/cuckoo-filter</h2>
                 </div>
-                <div id="filterhouse-filter-header">
+                <!--<div id="filterhouse-filter-header">
                     <h2>/XOR-filter</h2>
                 </div>
                 <div id="filterhouse-filter-header">
@@ -29,11 +29,10 @@
                 <!--js operations will insert the code here for each filter except bloomfilter as it will be by default 
                 here for the webpage index-->
                 <h3 id="filtersection-header">BloomFilter</h3>
-                <p>
                     <span>Bloom filters</span> are space-efficient probablistic data structures used to test whether an element is a member of a set.
                     Discovered by Burton Howard Bloom in 1970
                     <br><br>
-                    The explanation of bloomfilter is pretty standard and the parameters which it depends upon
+                    The explanation of bloomfilter is pretty standard and the parameters which it depends on
                     will be explained here. 
                     <br>
                     If you want to read more about bloomfilters i have listed some good resources later in the section
@@ -45,6 +44,80 @@
                          <li><p>p: false positive probablity exclusively (0, 1)</p></li>
                          <li> <p>n: expected number of elements in bloomfilter</p></li>
                     </ul>
+    
+                    Calculation is based on following formulae:
+                    <ul id="factor-list">
+                    	<li>
+                         <p style="background-color: white; color: black; text-align: center;">
+                             Bits needed:
+                             <math>
+                               <mi>m</mi><mo>=</mo>
+                               <mo>&lceil;</mo>
+                               <mfrac>
+                                 <mrow><mi>n</mi><mo>&sdot;</mo><mi>ln</mi><mo>&#8289;</mo><mi>p</mi></mrow>
+                                 <msup>
+                                   <mrow><mo>(</mo><mi>ln</mi><mo>&#8289;</mo><mn>2</mn><mo>)</mo></mrow>
+                                   <mn>2</mn>
+                                 </msup>
+                               </mfrac>
+                               <mo>&rceil;</mo>
+                             </math>
+                         </p>
+                        </li>
+                         <li>
+                             <p style="background-color: white; color: black; text-align: center;">
+                                 Optimal hash functions:
+                                 <math>
+                                   <mi>k</mi><mo>=</mo>
+                                   <mfrac><mi>m</mi><mi>n</mi></mfrac>
+                                   <mo>&sdot;</mo><mi>ln</mi><mo>&#8289;</mo><mn>2</mn>
+                                 </math>
+                             </p>
+                         </li>
+                         <li>
+                             <p style="background-color: white; color: black ; text-align: center;">False positive rate:
+                             <math>
+                               <mi>p</mi><mo>&approx;</mo>
+                               <msup>
+                                 <mrow>
+                                   <mo>(</mo><mn>1</mn><mo>&minus;</mo>
+                                   <msup>
+                                     <mi>e</mi>
+                                     <mrow>
+                                       <mo>&minus;</mo>
+                                       <mfrac><mrow><mi>k</mi><mi>n</mi></mrow><mi>m</mi></mfrac>
+                                     </mrow>
+                                   </msup>
+                                   <mo>)</mo>
+                                 </mrow>
+                                 <mi>k</mi>
+                               </msup>
+                             </math></p></li>
+                         <li> 
+                             <p style="background-color: white; color: black ; text-align: center;" >Expected number of elements in bloomfilter:
+                                 <math>
+                                     <mi>n</mi><mo>=</mo>
+                                    <mo>&lceil;</mo>
+                                     <mo>&minus;</mo>
+                                     <mfrac>
+                                       <mrow>
+                                         <mi>m</mi><mo>&sdot;</mo><mi>ln</mi><mo>&#8289;</mo>
+                                         <mrow>
+                                           <mo>(</mo><mn>1</mn><mo>&minus;</mo>
+                                           <msup><mi>p</mi><mrow><mn>1</mn><mo>/</mo><mi>k</mi></mrow></msup>
+                                           <mo>)</mo>
+                                         </mrow>
+                                       </mrow>
+                                       <mi>k</mi>
+                                     </mfrac>
+                                     <mo>&rceil;</mo>
+                                 </math>
+                                </math>
+                            </p>
+                         </li>
+                    </ul>
+         
+                    
                 </p>
 
                 <h4>Calculator:</h4>
