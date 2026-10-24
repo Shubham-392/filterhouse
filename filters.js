@@ -202,6 +202,7 @@ function formListener(e) {
   }
   else {
     const filterResultElem = document.getElementById("filter-result");
+    filterResultElem.innerHTML = '';
     for (const [key, value] of Object.entries(result)) {
       const p = document.createElement("p");
       // write result 
