@@ -236,7 +236,7 @@ function formListener(e) {
     }
   }
   else if (result.k < 1 || result.p >= 1) {
-    showWarning("Filter is too small: m is too small for n, so k comes out as 0");
+    showWarning("Filter is too small: m is too small for n ");
     showResult(result);
   }
   else {
