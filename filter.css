@@ -114,6 +114,7 @@ h4{
     margin-top: 2rem;
     margin-left:2rem;
     margin-right: 2rem;
+    min-height: 120px;
     border: solid 2px #faff69;
     border-radius: 5px;
     p{

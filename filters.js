@@ -4,6 +4,10 @@
 // p = pow(1 - exp(-k / (m / n)), k)
 // m = ceil((n * log(p)) / log(1 / pow(2, log(2))));
 // k = round((m / n) * log(2));
+
+const filterResultElem = document.getElementById("filter-result");
+
+
 function isNValid(n) {
   return !isNaN(n) && Number.isInteger(n) && n > 0;
 }
@@ -95,17 +99,46 @@ function changeInputType(givenParams, inputs) {
   return typeChangeInputs
 }
 
+function showWarning(msg) {
+  filterResultElem.innerHTML = '';
+  const p = document.createElement("p");
+  p.textContent = msg;
+  p.style.color = "red";
+  filterResultElem.appendChild(p);
+
+  window.scrollBy({
+    top: 100,
+    left: 0,
+    behavior: 'smooth'
+  });
+}
+
+function showResult(result) {
+  for (const [key, value] of Object.entries(result)) {
+    const p = document.createElement("p");
+    // write result 
+    p.textContent = `${key} = ${value}`;
+    filterResultElem.appendChild(p);
+
+    window.scrollBy({
+        top: 100,      // Number of pixels to scroll vertically (+ is down, - is up)
+        left: 0,       // Number of pixels to scroll horizontally
+        behavior: 'smooth' // Adds a smooth scrolling animation
+      });
+  }
+}
+
 function calculateBloomFilter(givenParams, missing, inputs) {
   const validChecker = {'k': isKValid, 'n':isNValid, 'm': isMValid, 'p':isPValid}
   
   const givenParamLen = givenParams.length;
   // all inputs are missing
   if ((givenParamLen == 0) || (givenParamLen == 1)) {
-    console.warn("Unable to derive");
+    showWarning("Enter some inputs for me to derive");
     return ;
   }
   if (givenParamLen == 4) {
-    console.log("Clear a field me to derive");
+    showWarning("Clear a field for me to derive it");
     return ;
   }
 
@@ -116,33 +149,32 @@ function calculateBloomFilter(givenParams, missing, inputs) {
   );
 
   if (!validCheck) {
-    console.warn("One or more values are invalid");
+    showWarning("Invalid input: n, m, k must be positive integers and p must be between 0 and 1");
     return;
   }
 
   var result = { ...cleanTypeInputs };
-  
-  console.log("valid check: ", validCheck);
 
-  
   if (givenParamLen == 2) {
     if (givenParams.includes("n") && givenParams.includes("p")) { 
       const [k,m] = __km_from_np(cleanTypeInputs['n'], cleanTypeInputs['p']);
       result.k = k;
       result.m = m;
+      return result;
     }// validate n and p from cleanTypeInputs
     if (givenParams.includes("m") && givenParams.includes("n")) { 
       const [k, p] = __kp_from_mn(cleanTypeInputs['m'], cleanTypeInputs['n']);
       result.k = k;
       result.p = p;
+      return result;
     }// validate m and n from cleanTypeInputs
     if (givenParams.includes("m") && givenParams.includes("p")) { 
       const [k, n] = __kn_from_mp(cleanTypeInputs['m'], cleanTypeInputs['p']);
       result.k = k;
       result.n = n;
+      return result;
     }// validate m and p from cleanTypeInputs
-
-    console.log("Unable to derive ");
+    return 
   }
   
   if (givenParamLen == 3) {
@@ -175,11 +207,11 @@ function calculateBloomFilter(givenParams, missing, inputs) {
   return result;
 }
 
-const formElem = document.getElementById('filter-calc');
-
 function formListener(e) {
   // Prevent the default browser page reload
   e.preventDefault();
+  filterResultElem.innerHTML = '';
+  
   const params = new Array('k', 'm', 'n', 'p');
   const f = new FormData(e.target);
   const inputs = { p: f.get('p'), m: f.get('m'), n: f.get('n'), k: f.get('k') };
@@ -197,25 +229,21 @@ function formListener(e) {
   }
 
   const result = calculateBloomFilter(givenParams, missing, inputs);
+  
   if (result == undefined) {
-    console.log("something is not good")
-  }
-  else {
-    const filterResultElem = document.getElementById("filter-result");
-    filterResultElem.innerHTML = '';
-    for (const [key, value] of Object.entries(result)) {
-      const p = document.createElement("p");
-      // write result 
-      p.textContent = `${key} = ${value}`;
-      filterResultElem.appendChild(p);
-
-      window.scrollBy({
-          top: 100,      // Number of pixels to scroll vertically (+ is down, - is up)
-          left: 0,       // Number of pixels to scroll horizontally
-          behavior: 'smooth' // Adds a smooth scrolling animation
-        });
+    if (!filterResultElem.hasChildNodes()) {
+          showWarning(`Unable to derive ${missing.join(", ")} from ${givenParams.join(", ")} `);
     }
   }
+  else if (result.k < 1 || result.p >= 1) {
+    showWarning("Filter is too small: m is too small for n, so k comes out as 0");
+    showResult(result);
+  }
+  else {
+    showResult(result);
+  }
 }
+
+const formElem = document.getElementById('filter-calc');
 
 formElem.addEventListener('submit', formListener);
