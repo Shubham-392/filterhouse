@@ -29,42 +29,79 @@
                 <!--js operations will insert the code here for each filter except bloomfilter as it will be by default 
                 here for the webpage index-->
                 <h3 id="filtersection-header">BloomFilter</h3>
-                    <span>Bloom filters</span> are space-efficient probablistic data structures used to test whether an element is a member of a set.
+                    <span>Bloom filters</span> are space-efficient probabilistic data structures used to test whether an element is a member of a set or not.
                     Discovered by Burton Howard Bloom in 1970
                     <br><br>
-                    The explanation of bloomfilter is pretty standard and the parameters which it depends on
-                    will be explained here. 
-                    <br>
-                    If you want to read more about bloomfilters i have listed some good resources later in the section
+                    The explanation of bloomfilter is pretty standard:
+                    take an array of <strong style="color: #faff69;">m</strong> bits, and for up to <strong style="color: #faff69;">n</strong> different elements, either test or set <strong style="color: #faff69;">k</strong> bits using positions chosen using hash functions. 
+                    If all bits are set, the element <i>probably</i> already exists, with a false positive rate of <strong style="color: #faff69;">p</strong>; if any of the bits are not set, the element <i>certainly</i> does not exist.
                     <br><br>
-                    Bloomfilter depends on following factors:
+                    Application of BloomFilter in database management systems: <br><br>
+                    The DBMS is a complex piece of software and have many componenets to control memory, disk reads, concurrency, etc. <br><br>
+                    In any production database like MySQL, PostgreSQL implements indexing with B+ Tree because it gives the power to the dbms to query for range scans
+                    with minimum disk I/O reads and every dbms wants to be fast in this section of the query for faster results.
+                    <br><br>
+                    But there is a little time consuming and more disk I/O operations are possible even though b+ tree is implemented as i said dbms wants to be fast
+                    so the problem is that <br>
+                    Every node in b+ tree is a page and pages are managed(fetched from disk to memory) in Buffer Pool Manager. 
+                    Consider dbms search for index key <strong>X</strong> then the search operation ahve to traverse from root to leaf inorder to get the truth of existence.
+                    If the key is present return the result if not we already done many disk operations(root to leaf) for a "no existence" answer.
+                    <br><br>
+                    <q style="color: #faff69;"><i>The inner node keys in a B+Tree cannot tell you
+                    whether a key exists in the index. You must always
+                    traverse to the leaf node.</i>
+                    </q>
+                    <br><br>
+                    To optimize this we have <strong style="color: #faff69;">BloomFilters</strong> over index key.
+                    The same scenario with BloomFilter is that if dbms have to search index key <strong style="color: #faff69;">X</strong> the search operation goes in bloomfilter if the key exists then it have to fetch the necessary page
+                    and if the key doesn't exist in bloomfilter it is <strong><i>definitely</i></strong> not in b+ index tree.
+                    <br><br>
+                    Hence, we saved some disk I/O and performance is boosted.
+                    <br><br>
+                    <strong style="color: #faff69;">Tradeoffs</strong> using BloomFilter: <br>
+                        The key trade-off is false positives - some non-existent items may pass the check.
+                        However, Bloom Filters never produce false negatives, so correctness is never compromised. <br>
+                        In practice, this trade-off is acceptable because the cost of an occasional extra check is far lower than performing expensive operations for every request.
+                    <br><br>
+                    Resources to learn more about B+ Tree and BloomFilters:
+                    <ul id = "factor-list">
+                        <li>B+Tree and database indexes <a href="https://planetscale.com/blog/btrees-and-database-indexes"> &#8599;</a></li>
+                        <li>Bloom Filter(wiki)<a href="https://en.wikipedia.org/wiki/Bloom_filter"> &#8599;</a></li>
+                        <li>Good article on bloomfilter <a href="https://medium.com/blog/what-are-bloom-filters-1ec2a50c68ff">&#8599;</a></li>
+                        <li>Another bloomfilter calculator <a href="https://hur.st/bloomfilter/">&#8599;</a></li>
+                        <li>CMU(15-445) db course pdf on bloomfilter and more filters are explained <a href="https://15445.courses.cs.cmu.edu/spring2026/slides/09-indexes2.pdf">&#8599;</a></li>
+                    </ul>
+                    <br><br>
+                    Bloomfilter depends on these factors:
                     <ul id="factor-list">
                     	<li><p>an array of m bits</p></li>
                          <li><p>k: different hash functions count</p></li>
-                         <li><p>p: false positive probablity exclusively (0, 1)</p></li>
+                         <li><p>p: false positive probability, between 0 and 1 (exclusive)</p></li>
                          <li> <p>n: expected number of elements in bloomfilter</p></li>
                     </ul>
     
                     Calculation is based on following formulae:
                     <ul id="factor-list">
                     	<li>
-                         <p style="background-color: white; color: black; text-align: center;">
-                             Bits needed:
-                             <math>
-                               <mi>m</mi><mo>=</mo>
-                               <mo>&lceil;</mo>
-                               <mfrac>
-                                 <mrow><mi>n</mi><mo>&sdot;</mo><mi>ln</mi><mo>&#8289;</mo><mi>p</mi></mrow>
-                                 <msup>
-                                   <mrow><mo>(</mo><mi>ln</mi><mo>&#8289;</mo><mn>2</mn><mo>)</mo></mrow>
-                                   <mn>2</mn>
-                                 </msup>
-                               </mfrac>
-                               <mo>&rceil;</mo>
-                             </math>
-                         </p>
+                             <p style="background-color: white; color: black; text-align: center;">
+                                 Bits needed:
+                                 <math>
+                                   <mi>m</mi><mo>=</mo>
+                                   <mo>&lceil;</mo>
+                                   <mo>&minus;</mo>
+                                   <mfrac>
+                                     <mrow><mi>n</mi><mo>&sdot;</mo><mi>ln</mi><mo>&#8289;</mo><mi>p</mi></mrow>
+                                     <msup>
+                                       <mrow><mo>(</mo><mi>ln</mi><mo>&#8289;</mo><mn>2</mn><mo>)</mo></mrow>
+                                       <mn>2</mn>
+                                     </msup>
+                                   </mfrac>
+                                   <mo>&rceil;</mo>
+                                 </math>
+                             </p>
                         </li>
-                         <li>
+
+                        <li>
                              <p style="background-color: white; color: black; text-align: center;">
                                  Optimal hash functions:
                                  <math>
@@ -75,24 +112,27 @@
                              </p>
                          </li>
                          <li>
-                             <p style="background-color: white; color: black ; text-align: center;">False positive rate:
-                             <math>
-                               <mi>p</mi><mo>&approx;</mo>
-                               <msup>
-                                 <mrow>
-                                   <mo>(</mo><mn>1</mn><mo>&minus;</mo>
+                             <p style="background-color: white; color: black ; text-align: center;">
+                                 False positive rate:
+                                 <math>
+                                   <mi>p</mi><mo>&approx;</mo>
                                    <msup>
-                                     <mi>e</mi>
                                      <mrow>
-                                       <mo>&minus;</mo>
-                                       <mfrac><mrow><mi>k</mi><mi>n</mi></mrow><mi>m</mi></mfrac>
+                                       <mo>(</mo><mn>1</mn><mo>&minus;</mo>
+                                       <msup>
+                                         <mi>e</mi>
+                                         <mrow>
+                                           <mo>&minus;</mo>
+                                           <mfrac><mrow><mi>k</mi><mi>n</mi></mrow><mi>m</mi></mfrac>
+                                         </mrow>
+                                       </msup>
+                                       <mo>)</mo>
                                      </mrow>
+                                     <mi>k</mi>
                                    </msup>
-                                   <mo>)</mo>
-                                 </mrow>
-                                 <mi>k</mi>
-                               </msup>
-                             </math></p></li>
+                                 </math>
+                             </p>
+                         </li>
                          <li> 
                              <p style="background-color: white; color: black ; text-align: center;" >Expected number of elements in bloomfilter:
                                  <math>
@@ -112,13 +152,9 @@
                                      </mfrac>
                                      <mo>&rceil;</mo>
                                  </math>
-                                </math>
                             </p>
                          </li>
                     </ul>
-         
-                    
-                </p>
 
                 <h4>Calculator:</h4>
                 <form id="filter-calc">
